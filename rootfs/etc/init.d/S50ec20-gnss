@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Start EC20 GNSS
+
+
+case "$1" in
+  start)
+        printf "Starting EC20 GNSS: "
+        sleep 5 && echo -e 'AT+QGPS=1\r\n' > /dev/ttyUSB2 && echo "OK" || echo "FAIL"
+        ;;
+  stop)
+        printf "Stopping EC20 GNSS: "
+        echo -e 'AT+QGPS=0\r\n' > /dev/ttyUSB2 && echo "OK" || echo "FAIL"
+        ;;
+  restart|reload)
+        "$0" stop
+        "$0" start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $?
+

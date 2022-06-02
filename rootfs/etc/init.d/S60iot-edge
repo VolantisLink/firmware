@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Start iot-edge
+
+
+NAME=iot-edge
+BASE=/mnt/mmcblk0p1
+DAEMON=$BASE/bin/iot-edge
+CONFIG=$BASE/conf/iot-edge.toml
+PIDFILE=/var/run/$NAME.pid
+
+case "$1" in
+  start)
+        printf "Starting $NAME: "
+        if [ ! -f "$DAEMON" ]; then
+            echo "$DAEMON does not exist."
+            exit 1
+        fi
+        if [ ! -f "$CONFIG" ]; then
+            echo "$CONFIG does not exist."
+            exit 1
+        fi
+
+        start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -P $PIDFILE -c $CONFIG && echo "OK" || echo "Failed"
+        ;;
+  stop)
+        printf "Stopping $NAME: "
+        start-stop-daemon -K -q -p $PIDFILE && echo "OK" || echo "Failed"
+        rm -f $PIDFILE
+        ;;
+  restart|reload)
+        "$0" stop
+        "$0" start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $?
+
