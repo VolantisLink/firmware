@@ -21,7 +21,7 @@ case "$1" in
             exit 1
         fi
 
-        start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -P $PIDFILE -c $CONFIG && echo "OK" || echo "Failed"
+        start-stop-daemon -S -q -m -p $PIDFILE --exec $DAEMON --background -- -c $CONFIG && echo "OK" || echo "Failed"
         ;;
   stop)
         printf "Stopping $NAME: "
