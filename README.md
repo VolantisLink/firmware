@@ -18,7 +18,7 @@ sudo apt install -y automake gcc g++ git make rsync libncurses-dev
 - `buildroot-config.2022.02.1.python` -- 加入了`python-3.10`支持。
 
 ```sh
-git clone git@gitee.com:candtu/firmware.git
+git clone https://github.com/VolantisLink/firmware.git
 cd firmware
 mkdir build
 cd build
