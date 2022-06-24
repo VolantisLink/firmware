@@ -5,19 +5,29 @@
 
 NAME=iot-edge
 BASE=/mnt/mmcblk0p1
-DAEMON=$BASE/bin/iot-edge
+LOG=$BASE/logs/iot-edge.log
+DEVICE=/dev/mmcblk0p1
+DAEMON=/usr/local/bin/iot-edge
 CONFIG=$BASE/conf/iot-edge.toml
 PIDFILE=/var/run/$NAME.pid
 
 case "$1" in
   start)
+	printf "Checking filesystem..."
+	mkdir -p $BASE
+	fsck.vfat -a -w $DEVICE
+	mount -t vfat $DEVICE $BASE
+	mkdir -p $BASE/logs
+
         printf "Starting $NAME: "
         if [ ! -f "$DAEMON" ]; then
             echo "$DAEMON does not exist."
+	    echo "File $DAEMON does not exist!" >> $LOG
             exit 1
         fi
         if [ ! -f "$CONFIG" ]; then
             echo "$CONFIG does not exist."
+	    echo "File $CONFIG does not exist!" >> $LOG
             exit 1
         fi
 
@@ -27,6 +37,8 @@ case "$1" in
         printf "Stopping $NAME: "
         start-stop-daemon -K -q -p $PIDFILE && echo "OK" || echo "Failed"
         rm -f $PIDFILE
+        sync
+	umount $BASE
         ;;
   restart|reload)
         "$0" stop

@@ -12,10 +12,9 @@ sudo apt install -y automake gcc g++ git make rsync libncurses-dev
 
 ### 0x01-1 编译默认配置的镜像
 
-系统包含了两个初始的buildroot配置文件：
+系统包含了初始buildroot配置文件：
 
 - `buildroot-config.2022.02.1.minimal` -- 最小配置，编译的`iot-edge`可以运行。
-- `buildroot-config.2022.02.1.python` -- 加入了`python-3.10`支持。
 
 ```sh
 git clone https://github.com/VolantisLink/firmware.git
@@ -25,7 +24,7 @@ cd build
 wget https://github.com/buildroot/buildroot/archive/refs/tags/2022.02.1.tar.gz
 tar zxvf 2022.02.1.tar.gz
 cd buildroot-2022.02.1
-cp ../../config/buildroot-config.2022.02.1.minimal .config
+cp ../../config/buildroot-config.2022.02.1 .config
 mkdir -p output/build/image
 make
 cp output/images/uImage ../../burn/images
@@ -73,3 +72,27 @@ cp ../build/buildroot-2022.02.1/output/images/uImage images
 cp ../build/buildroot-2022.02.1/output/images/u-boot.bin images
 sudo nuwriter run.ini
 ```
+
+## FAQ
+
+1. 编译过程中出现以下错误信息：
+
+```
+Could not fetch special ref 'master'; assuming it is not special.
+Commit 'master' does not exist in this repository.
+```
+
+可以手工执行以下命令解决：
+
+```
+cd dl/linux
+rm -rf git
+git clone https://gitee.com/OpenNuvoton/NUC980-linux-4.4.y.git git 
+cd ../../
+make
+```
+
+## Roadmap
+
+- [ ] 通过IIO接口监控电压，电压降低到20V以下停止iot-edge，并卸载sd卡。
+- [ ] 支持使用mtp协议挂载日志目录和配置目录。
