@@ -1,22 +1,27 @@
 #!/bin/sh
 
-GADGETFS_PATH=/dev/gadget
+#GADGETFS_PATH=/dev/gadget
 UMTPRD_DAEMON_NAME=uMTPrd
 UMTPRD_DAEMON_PATH=/usr/bin/umtprd
 UMTPRD_DAEMON_OPTS=
 UMTPRD_DAEMON_USER=root
+MTP_PATH=/dev/ffs-mtp
 
 case "$1" in
   start)
     echo -n "Start uMTPrd daemon :"
-    if [ ! -d "$GADGETFS_PATH" ]; then
-      mkdir $GADGETFS_PATH
-    fi
+    #if [ ! -d "$GADGETFS_PATH" ]; then
+    #  mkdir $GADGETFS_PATH
+    #fi
 
-    mountpoint -q $GADGETFS_PATH
-    MOUNTED=$?
-    if [ "$MOUNTED" != "0" ] ; then
-        mount -t gadgetfs gadgetfs $GADGETFS_PATH
+    #mountpoint -q $GADGETFS_PATH
+    #MOUNTED=$?
+    #if [ "$MOUNTED" != "0" ] ; then
+    #    mount -t gadgetfs gadgetfs $GADGETFS_PATH
+    #fi
+
+    if [ ! -d "$MTP_PATH" ]; then
+      /usr/local/bin/umtprd-ffs.sh
     fi
 
     start-stop-daemon -S --background --name $UMTPRD_DAEMON_NAME \
