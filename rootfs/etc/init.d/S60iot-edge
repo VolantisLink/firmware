@@ -6,6 +6,7 @@
 NAME=iot-edge
 BASE=/mnt/mmcblk0p1
 LOG=$BASE/logs/iot-edge.log
+ERR=$BASE/logs/iot-edge.err
 DEVICE=/dev/mmcblk0p1
 DAEMON=/usr/local/bin/iot-edge
 CONFIG=$BASE/conf/iot-edge.toml
@@ -22,12 +23,12 @@ case "$1" in
         printf "Starting $NAME: "
         if [ ! -f "$DAEMON" ]; then
             echo "$DAEMON does not exist."
-	    echo "File $DAEMON does not exist!" >> $LOG
+	    echo "File $DAEMON does not exist!" >> $ERR
             exit 1
         fi
         if [ ! -f "$CONFIG" ]; then
             echo "$CONFIG does not exist."
-	    echo "File $CONFIG does not exist!" >> $LOG
+	    echo "File $CONFIG does not exist!" >> $ERR
             exit 1
         fi
 
